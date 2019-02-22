@@ -1,0 +1,32 @@
+import PyPDF2 as pdf
+import os
+import glob
+
+def pdfReader(pdfFile):
+    pdfReader = pdf.PdfFileReader(pdfFile)
+    numPage = pdfReader.getNumPages()
+    consolidate = ''
+    i = 1
+    for i in range(numPage-1):
+        pgObj = pdfReader.getPage(i+1)
+        consolidate = consolidate + pgObj.extractText()    
+    return consolidate
+
+pdfpath = input('Enter PDF Folder Path: ')
+txtpath = input(' Where do you want to save the files? :')
+
+os.chdir(pdfpath)
+
+for file in glob.glob('*.pdf'):
+    output = ''
+    txtProc = ''
+    fileName = file.split('.')
+    out_file_name_txt = fileName[0]+'_conv.txt'
+    save_path_txt = os.path.join(txtpath,out_file_name_txt)
+    pdfFile = open(file,'rb')
+    print(fileName)
+    output = pdfReader(pdfFile)
+    pdfFile.close()
+    f = open(save_path_txt,'w')
+    print(txtProc,file = f)
+    f.close()
